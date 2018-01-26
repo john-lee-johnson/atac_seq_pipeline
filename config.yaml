@@ -23,8 +23,8 @@ diffexp:
   # contrasts for the deseq2 results method
   contrasts:
     Empty-vs-BATF:
-      - Empty
       - BATF
+      - Empty
   label:
     - "Empty vs BATF"
 
