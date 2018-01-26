@@ -1,0 +1,5 @@
+channels:
+  - bioconda
+dependencies:
+  - python =2.7.14
+  - ngsutils =0.5.9
