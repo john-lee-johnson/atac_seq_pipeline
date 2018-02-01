@@ -22,14 +22,18 @@ pca:
 diffexp:
   # contrasts for the deseq2 results method
   contrasts:
-    Empty-vs-BATF:
-      - BATF
-      - Empty
+    Tcf1KO-vs-WT:
+        # put the condition for the left of the volcano plot first
+      - Tcf1KO
+      - WT
   label:
-    - "Empty vs BATF"
+    - "TCF1KO vs WT"
 
 params:
-  star: "--genomeLoad LoadAndKeep --limitBAMsortRAM 10000000000 --alignMatesGapMax 2000 --alignSJDBoverhangMin 9999 --alignSJoverhangMin 9999 --alignIntronMax 1 --outFilterMultimapNmax 1 --outFilterScoreMinOverLread 0 --outFilterMatchNminOverLread 0 --seedSearchStartLmax 30 --alignEndsType Local --outReadsUnmapped Fastx"
+  star: "--genomeLoad LoadAndKeep --limitBAMsortRAM 10000000000 --alignMatesGapMax 2000 --alignSJDBoverhangMin 9999 --alignSJoverhangMin 9999 --alignIntronMax 1 --outFilterMultimapNmax 1 --outFilterScoreMinOverLread 0 --outFilterMatchNminOverLread 0 --seedSearchStartLmax 30 --alignEndsType Local --outReadsUnmapped Fastx "
   cutadapt-se: ""
   cutadapt-pe: ""
   macs2: "mm"
+  blacklist: "/mnt/data1/John/DATA_Common/blacklist/mm10.blacklist.bed"
+  homer: "/mnt/data1/John/bin/pyenv/versions/anaconda3-5.0.1/pkgs/homer-4.9.1-pl5.22.0_5/share/homer-4.9.1-5/data/genomes/mm10"
+  genome: "/mnt/data1/John/DATA_Common/chrom.sizes/mm10.chrom.sizes"

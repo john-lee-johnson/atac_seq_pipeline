@@ -5,31 +5,17 @@ def get_macs(wildcards):
     sample_list = expand("macs/{sample}_peaks.narrowPeak", unit=unit.reset_index(), sample=wildcards.sample)
     return unit_list
 
-rule merge_and_sort:
-    input:
-        "macs/{sample}_peaks.narrowPeak"
-    output:
-        "macs/bedgraph/{sample}_peaks.bedgraph"
-    conda:
-        "../envs/macs2.yaml"
-    shell:
-        """
-        sort -k1,1 -k2,2n {input} | bedtools merge -i - -c 5 -o mean > {output}
-        """
-
-rule unionbedgraph:
-    input:
-        expand("macs/bedgraph/{unit.sample}_peaks.bedgraph", unit=units.reset_index().drop_duplicates(subset='sample').itertuples())
-    output:
-        "macs/unionbedg/union.bedgraph"
-    conda:
-        "../envs/macs2.yaml"
-    params:
-        units=units
-    shell:
-        """
-        bedtools unionbedg -i {input} > {output}.unsorted && sort -k1,1 -k2,2n {output}.unsorted | bedtools merge -i - > {output}
-        """
+#rule merge_and_sort:
+#    input:
+#        "macs/{sample}_peaks.narrowPeak"
+#    output:
+#        "macs/bedgraph/{sample}_peaks.bedgraph"
+#    conda:
+#        "../envs/macs2.yaml"
+#    shell:
+#        """
+#        sort -k1,1 -k2,2n {input} | bedtools merge -i - -c 5 -o mean > {output}
+#        """
 
 rule multicov:
     input:
@@ -142,33 +128,3 @@ rule deseq2_write:
     threads: get_deseq2_threads
     script:
         "../scripts/deseq2-write.R"
-
-rule deseq2_to_bed:
-    input:
-        gain="results/diffexp/{contrast}_gain.diffexp.tsv",
-        loss="results/diffexp/{contrast}_loss.diffexp.tsv",
-    output:
-        gain_bed="results/diffexp/bed/{contrast}_gain.diffexp.bed",
-        loss_bed="results/diffexp/bed/{contrast}_loss.diffexp.bed",
-    shell:
-        """
-        tail -n +2 {input.gain} | cut -d' ' -f1 | cut -d'_' -f1,2,3 --output-delimiter=$'\t' > {output.gain_bed} && tail -n +2 {input.loss} | cut -d' ' -f1 | cut -d'_' -f1,2,3 --output-delimiter=$'\t' > {output.loss_bed}
-        """
-
-rule homer:
-    input:
-        gain="results/diffexp/bed/{contrast}_gain.diffexp.bed",
-        loss="results/diffexp/bed/{contrast}_loss.diffexp.bed",
-    output:
-        gain="motif/{contrast}_gain_sites/homerResults.html",
-        loss="motif/{contrast}_loss_sites/homerResults.html",
-    conda:
-        "../envs/homer.yaml"
-    params:
-        gain="motif/{contrast}_gain_sites/",
-        loss="motif/{contrast}_loss_sites/",
-        genome="/mnt/data1/John/bin/pyenv/versions/anaconda3-5.0.1/pkgs/homer-4.9.1-pl5.22.0_5/share/homer-4.9.1-5/data/genomes/mm10"
-    shell:
-        """
-        findMotifsGenome.pl {input.gain} {params.genome} {params.gain} -p 30 && findMotifsGenome.pl {input.loss} {params.genome} {params.loss} -p 30
-        """

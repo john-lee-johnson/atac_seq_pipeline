@@ -5,7 +5,7 @@ rule deseq2_to_bed:
         "results/diffexp/bed/{contrast}_{result}.diffexp.bed",
     shell:
         """
-        tail -n +2 {input} | cut -d' ' -f1 | cut -d'_' -f1,2,3 --output-delimiter=$'\t' > {output}
+        tail -n +2 {input} | cut -d' ' -f1 | cut -d'.' -f1,2,3 --output-delimiter=$'\t' > {output}
         """
 
 rule homer:
