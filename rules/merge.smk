@@ -25,26 +25,22 @@ rule merge_unit_lane:
         get_lane_input
     output:
         "merge/{sample}-{unit}.bam"
-    conda:
-        "../../../github/snakemake-wrappers/bio/picard/markduplicates/environment.yaml"
     log:
         "logs/picard/mergebam/{sample}-{unit}.log"
     params: ""
     wrapper:
-        "0.19.3/bio/picard/mergesamfiles"
+        "master/bio/picard/mergesamfiles"
 
 rule merge_sample_lane:
     input:
         get_lane_input
     output:
         "merge/{sample}.bam"
-    conda:
-        "../../../github/snakemake-wrappers/bio/picard/markduplicates/environment.yaml"
     log:
         "logs/picard/mergebam/{sample}.log"
     params: ""
     wrapper:
-        "0.19.3/bio/picard/mergesamfiles"
+        "master/bio/picard/mergesamfiles"
 
 
 rule merge_unit:
@@ -52,25 +48,21 @@ rule merge_unit:
         get_unit_input
     output:
         "bam/merge/{sample}.bam"
-    conda:
-        "../../../github/snakemake-wrappers/bio/picard/markduplicates/environment.yaml"
     log:
         "logs/picard/mergebam/{sample}.log"
     params: ""
     wrapper:
-        "0.19.3/bio/picard/mergesamfiles"
+        "master/bio/picard/mergesamfiles"
 
 rule merge_all:
     input:
         expand("bam/{unit.sample}.bam", unit=units.reset_index().itertuples())
     output:
         "bam/all_samples_merged.bam"
-    conda:
-        "../../../github/snakemake-wrappers/bio/picard/markduplicates/environment.yaml"
     log:
         "logs/picard/mergebam/all_samples_merged.log"
     params: ""
     wrapper:
-        "0.19.3/bio/picard/mergesamfiles"
+        "master/bio/picard/mergesamfiles"
 
 

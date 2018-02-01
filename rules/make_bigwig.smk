@@ -46,7 +46,7 @@ rule make_bigwig_unit:
         normalize = "--scaleFactor",
         scale = get_scaling_factor,
         blacklist = config["params"]["blacklist"],
-    threads: 8
+    threads: 1
     shell:
         """
         samtools index {input} && bamCoverage --bam {input} -o {output} --binSize {params.binsize} --outFileFormat {params.outformat} {params.normalize} {params.scale} --blackListFileName {params.blacklist} -p {threads} 2> {log}
@@ -67,7 +67,7 @@ rule make_bigwig_sample:
         normalize = "--scaleFactor",
         scale = get_scaling_factor,
         blacklist = config["params"]["blacklist"],
-    threads: 8
+    threads: 1
     shell:
         """
         samtools index {input} && bamCoverage --bam {input} -o {output} --binSize {params.binsize} --outFileFormat {params.outformat} {params.normalize} {params.scale} --blackListFileName {params.blacklist} -p {threads} 2> {log}
@@ -89,7 +89,7 @@ rule make_bigwig_unit_TSS:
         normalize = "--scaleFactor",
         scale = get_scaling_factor_TSS,
         blacklist = config["params"]["blacklist"],
-    threads: 8
+    threads: 1
     shell:
         """
         samtools index {input.bam} && bamCoverage --bam {input.bam} -o {output} --binSize {params.binsize} --outFileFormat {params.outformat} {params.normalize} {params.scale} --blackListFileName {params.blacklist} -p {threads} 2> {log}
@@ -111,7 +111,7 @@ rule make_bigwig_sample_TSS:
         normalize = "--scaleFactor",
         scale = get_scaling_factor_TSS,
         blacklist = config["params"]["blacklist"],
-    threads: 8
+    threads: 1
     shell:
         """
         samtools index {input.bam} && bamCoverage --bam {input.bam} -o {output} --binSize {params.binsize} --outFileFormat {params.outformat} {params.normalize} {params.scale} --blackListFileName {params.blacklist} -p {threads} 2> {log}
@@ -132,7 +132,7 @@ rule make_bigwig_unit_rpkm:
         outformat = "bigwig",
         normalize = "--normalizeUsingRPKM",
         blacklist = config["params"]["blacklist"],
-    threads: 8
+    threads: 1
     shell:
         """
         samtools index {input} && bamCoverage --bam {input} -o {output} --binSize {params.binsize} --outFileFormat {params.outformat} {params.normalize} --blackListFileName {params.blacklist} -p {threads} 2> {log}
@@ -152,7 +152,7 @@ rule make_bigwig_sample_rpkm:
         outformat = "bigwig",
         normalize = "--normalizeUsingRPKM",
         blacklist = config["params"]["blacklist"],
-    threads: 8
+    threads: 1
     shell:
         """
         samtools index {input} && bamCoverage --bam {input} -o {output} --binSize {params.binsize} --outFileFormat {params.outformat} {params.normalize} --blackListFileName {params.blacklist} -p {threads} 2> {log}
@@ -174,7 +174,7 @@ rule make_bedgraph_unit:
         normalize = "--scaleFactor",
         scale = get_scaling_factor,
         blacklist = config["params"]["blacklist"],
-    threads: 8
+    threads: 1
     shell:
         """
         samtools index {input} && bamCoverage --bam {input} -o {output} --binSize {params.binsize} --outFileFormat {params.outformat} {params.normalize} {params.scale} --blackListFileName {params.blacklist} -p {threads} 2> {log}
@@ -195,7 +195,7 @@ rule make_bedgraph_sample:
         normalize = "--scaleFactor",
         scale = get_scaling_factor,
         blacklist = config["params"]["blacklist"],
-    threads: 8
+    threads: 1
     shell:
         """
         samtools index {input} && bamCoverage --bam {input} -o {output} --binSize {params.binsize} --outFileFormat {params.outformat} {params.normalize} {params.scale} --blackListFileName {params.blacklist} -p {threads} 2> {log}
@@ -216,7 +216,7 @@ rule make_bigwig_all:
         outformat = "bigwig",
         normalize = "--normalizeUsingRPKM",
         blacklist = config["params"]["blacklist"],
-    threads: 8
+    threads: 1
     shell:
         """
         samtools index {input} && bamCoverage --bam {input} -o {output} --binSize {params.binsize} --outFileFormat {params.outformat} {params.normalize} --blackListFileName {params.blacklist} -p {threads} 2> {log}

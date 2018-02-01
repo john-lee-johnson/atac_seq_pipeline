@@ -27,8 +27,6 @@ rule mark_duplicates_units:
     output:
         bam=temp("dedup/unfiltered/{sample}-{unit}.unfiltered.bam"),
         metrics="dedup/unfiltered/{sample}-{unit}.metrics.txt"
-    conda:
-        "../../../github/snakemake-wrappers/bio/picard/markduplicates/environment.yaml"
     log:
         "logs/picard/dedup/{sample}-{unit}.log"
     params:
@@ -36,7 +34,7 @@ rule mark_duplicates_units:
         "READ_NAME_REGEX=null "
         "TMP_DIR=/mnt/data1/John/tmp "
     wrapper:
-        "file://../../github/snakemake-wrappers/bio/picard/markduplicates/wrapper.py"
+        "master/bio/picard/markduplicates"
 
 rule mark_duplicates_samples:
     input:
@@ -44,8 +42,6 @@ rule mark_duplicates_samples:
     output:
         bam=temp("dedup/unfiltered/{sample}.unfiltered.bam"),
         metrics="dedup/unfiltered/{sample}.metrics.txt"
-    conda:
-        "../../../github/snakemake-wrappers/bio/picard/markduplicates/environment.yaml"
     log:
         "logs/picard/dedup/{sample}.log"
     params:
@@ -53,4 +49,5 @@ rule mark_duplicates_samples:
         "READ_NAME_REGEX=null "
         "TMP_DIR=/mnt/data1/John/tmp "
     wrapper:
-        "file://../../github/snakemake-wrappers/bio/picard/markduplicates/wrapper.py"
+        "master/bio/picard/markduplicates"
+
