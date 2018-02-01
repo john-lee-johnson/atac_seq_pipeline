@@ -3,13 +3,13 @@ def get_trimmed(wildcards):
     if not is_single_end(wildcards.sample, wildcards.lane):
         # paired-end sample
         if (units.loc[[wildcards.sample]]['unit'].notnull().values.any() and hasattr(wildcards, 'unit')):
-            # has units
+           # has units
             return expand("trimmed/{sample}-{unit}-{lane}_{group}.fastq.gz",
-                      group=[1, 2], **wildcards)
+                      group=[1,2], **wildcards)
         else:
             # no units
             return expand("trimmed/{sample}-{lane}_{group}.fastq.gz",
-                      group=[1, 2], **wildcards) 
+                      group=[1,2], **wildcards)
     # single end sample
     else:
         if (units.loc[[wildcards.sample]]['unit'].notnull().values.any() and hasattr(wildcards, 'unit')):
@@ -17,7 +17,6 @@ def get_trimmed(wildcards):
             return "trimmed/{sample}-{unit}-{lane}.fastq.gz".format(**wildcards)
             # no units
     return "trimmed/{sample}-{lane}.fastq.gz".format(**wildcards)
-
 
 rule align_no_unit:
     input:
@@ -27,8 +26,6 @@ rule align_no_unit:
         protected("star/{sample}-{lane}/Aligned.sortedByCoord.out.bam"),
     log:
         "logs/star/{sample}-{lane}.log"
-    conda:
-        "../../../github/snakemake-wrappers/bio/star/align/environment.yaml"
     params:
         # path to STAR reference genome index
         index=config["ref"]["index"],
@@ -36,7 +33,7 @@ rule align_no_unit:
         extra="{}".format(config["params"]["star"])
     threads: 17
     wrapper:
-        "file://../../github/snakemake-wrappers/bio/star/align/wrapper.py"
+        "https://bitbucket.org/john-lee-johnson/snakemake-wrappers/raw/master/bio/star/align"
 
 rule align_unit:
     input:
@@ -46,8 +43,6 @@ rule align_unit:
         protected("star/{sample}-{unit}-{lane}/Aligned.sortedByCoord.out.bam"),
     log:
         "logs/star/{sample}-{unit}-{lane}.log"
-    conda:
-        "../../../github/snakemake-wrappers/bio/star/align/environment.yaml"
     params:
         # path to STAR reference genome index
         index=config["ref"]["index"],
@@ -55,4 +50,4 @@ rule align_unit:
         extra="{}".format(config["params"]["star"])
     threads: 17
     wrapper:
-        "file://../../github/snakemake-wrappers/bio/star/align/wrapper.py"
+        "https://bitbucket.org/john-lee-johnson/snakemake-wrappers/raw/master/bio/star/align"
