@@ -5,10 +5,8 @@ rule fastqc:
         html="qc/{fastq}_fastqc.html",
         zip="qc/{fastq}_fastqc.zip",
     params: ""
-    conda:
-        "../../../github/snakemake-wrappers/bio/fastqc/environment.yaml"
     wrapper:
-        "file://../../github/snakemake-wrappers/bio/fastqc/wrapper.py"
+        "master/bio/fastqc"
 
 rule fastqc_trimmed_with_unit:
     input:
@@ -17,10 +15,8 @@ rule fastqc_trimmed_with_unit:
         html="qc/{sample}-{unit}-{fastq}_trimmed_fastqc.html",
         zip="qc/{sample}-{unit}-{fastq}_trimmed_fastqc.zip"
     params: ""
-    conda:
-        "../../../github/snakemake-wrappers/bio/fastqc/environment.yaml"
     wrapper:
-        "file://../../github/snakemake-wrappers/bio/fastqc/wrapper.py"
+        "master/bio/fastqc"
 
 rule fastqc_trimmed_without_unit:
     input:
@@ -29,8 +25,5 @@ rule fastqc_trimmed_without_unit:
         html="qc/{sample}-{fastq}_trimmed_fastqc.html",
         zip="qc/{sample}-{fastq}_trimmed_fastqc.zip"
     params: ""
-    conda:
-        "../../../github/snakemake-wrappers/bio/fastqc/environment.yaml"
     wrapper:
-        "file://../../github/snakemake-wrappers/bio/fastqc/wrapper.py"
-
+        "master/bio/fastqc"
