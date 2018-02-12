@@ -7,10 +7,12 @@ for f in snakemake.input:
     coverage.set_index(['chr'], inplace=True)
     counts.append(coverage[['coverage']])
 
+counts_subset = []
 for t, (sample) in zip(counts, snakemake.params.samples.index):
     t.columns = [sample]
-
-matrix = pd.concat(counts, axis=1)
+    counts_subset.append(t)
+    
+matrix = pd.concat(counts_subset, axis=1)
 matrix.index.name = "peak"
 # collapse technical replicates
 #matrix = matrix.groupby(matrix.columns, axis=1).sum()

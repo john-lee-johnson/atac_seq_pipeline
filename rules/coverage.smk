@@ -16,6 +16,28 @@ def get_idr_input(wildcards):
     # no units
         return "idr/{sample}/{sample}-optimal-peakset.narrowPeak".format(sample=wildcards.sample)
 
+def get_idr_subset_input(wildcards):
+    units = pd.read_table(config["subset"], index_col=["sample"], dtype=str).sort_index(level=0)
+    idr_list = []
+    idr_list = idr_list + expand("idr/{unit.sample}/{unit.sample}-conservative-peakset.narrowPeak", unit=units[units['unit'].notnull()].reset_index().drop_duplicates(subset='sample').itertuples())
+    idr_list = idr_list + expand("idr/{unit.sample}/{unit.sample}-optimal-peakset.narrowPeak", unit=units[units['unit'].isnull()].reset_index().drop_duplicates(subset='sample').itertuples())
+    return(idr_list)
+
+def get_idr_subset_input_distal(wildcards):
+    units = pd.read_table(config["subset"], index_col=["sample"], dtype=str).sort_index(level=0)
+    idr_list = []
+    idr_list = idr_list + expand("idr/distal/{unit.sample}/{unit.sample}-peakset-distal.narrowPeak", unit=units[units['unit'].notnull()].reset_index().drop_duplicates(subset='sample').itertuples())
+    #idr_list = idr_list + expand("idr/distal/{unit.sample}/{unit.sample}-peakset-distal.narrowPeak", unit=units[units['unit'].isnull()].reset_index().drop_duplicates(subset='sample').itertuples())
+    return(idr_list)
+
+def get_idr_subset_input_promoter(wildcards):
+    units = pd.read_table(config["subset"], index_col=["sample"], dtype=str).sort_index(level=0)
+    idr_list = []
+    idr_list = idr_list + expand("idr/promoter/{unit.sample}/{unit.sample}-peakset-promoter.narrowPeak", unit=units[units['unit'].notnull()].reset_index().drop_duplicates(subset='sample').itertuples())
+    #idr_list = idr_list + expand("idr/promoter/{unit.sample}/{unit.sample}-peakset-promoter.narrowPeak", unit=units[units['unit'].isnull()].reset_index().drop_duplicates(subset='sample').itertuples())
+    return(idr_list)
+
+
 rule merge_macs_peaks:
     input:
         get_idr_input
@@ -30,7 +52,7 @@ rule merge_macs_peaks:
 
 rule unionbedgraph:
     input:
-        expand("macs/bedgraph/{unit.sample}_peaks.bedgraph", unit=units.reset_index().drop_duplicates(subset='sample').itertuples())
+        expand("macs/bedgraph/{unit.sample}_peaks.bedgraph", unit=subset.reset_index().drop_duplicates(subset='sample').itertuples())
     output:
         "macs/unionbedg/union.bedgraph"
     conda:
@@ -41,6 +63,7 @@ rule unionbedgraph:
         """
         bedtools unionbedg -i {input} > {output}.unsorted && sort -k1,1 -k2,2n {output}.unsorted | bedtools merge -i - > {output}
         """
+
 
 rule unionbedgraph_TSS:
     input:

@@ -25,7 +25,7 @@ rule call_peaks_sample:
     output:
         peak = "macs/{sample}_peaks.narrowPeak",
         bdg = "macs/{sample}_treat_pileup.bdg",
-        ctrl = temp("macs/{sample}_control_lambda.bdg")
+        ctrl = "macs/{sample}_control_lambda.bdg"
     log:
         "logs/macs2/call_peaks/{sample}.log"
     conda:
@@ -35,7 +35,7 @@ rule call_peaks_sample:
         extra = "{}".format(config["params"]["macs2"])
     shell:
         """
-        macs2 callpeak -t {input} -f BAMPE -g {params.extra} --outdir macs -n {params.name} --nomodel --keep-dup all -B --call-summits -p 0.01 &> {log}
+        macs2 callpeak -t {input} -f BAMPE -g {params.extra} --outdir macs -n {params.name} --nomodel --keep-dup all -B --call-summits -q 0.9 &> {log}
         """
 
 rule call_peaks_units:
@@ -43,7 +43,7 @@ rule call_peaks_units:
     output:
         peak = "macs/units/{sample}-{unit}_peaks.narrowPeak",
         bdg = "macs/units/{sample}-{unit}_treat_pileup.bdg",
-        ctrl = temp("macs/units/{sample}-{unit}_control_lambda.bdg")
+        ctrl = "macs/units/{sample}-{unit}_control_lambda.bdg"
     log: "logs/macs2/call_peaks/{sample}-{unit}.log"
     conda: "../envs/macs2.yaml"
     params:
@@ -51,7 +51,7 @@ rule call_peaks_units:
         extra = "{}".format(config["params"]["macs2"])
     shell:
         """
-        macs2 callpeak -t {input} -f BAMPE -g {params.extra} --outdir macs/units -n {params.name} --nomodel --keep-dup all -B --call-summits -p 0.01 &> {log}
+        macs2 callpeak -t {input} -f BAMPE -g {params.extra} --outdir macs/units -n {params.name} --nomodel --keep-dup all -B --call-summits -q 0.9 &> {log}
         """
 
 rule call_peaks_pseudoreps:
@@ -69,7 +69,7 @@ rule call_peaks_pseudoreps:
         extra = "{}".format(config["params"]["macs2"])
     shell:
         """
-        macs2 callpeak -t {input} -f BEDPE -g {params.extra} --outdir macs/pseudoreps -n {params.name} --nomodel --keep-dup all -B --call-summits -p 0.01 &> {log}
+        macs2 callpeak -t {input} -f BEDPE -g {params.extra} --outdir macs/pseudoreps -n {params.name} --nomodel --keep-dup all -B --call-summits -q 0.9 &> {log}
         """
 
 rule macs_bigwig_sample:
